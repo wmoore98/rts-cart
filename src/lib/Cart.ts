@@ -8,13 +8,6 @@ export interface CartedItem extends Cartable {
 }
 
 export interface CartInterface<T extends CartedItem> {
-  // list: CartedItem[];
-  // add(itemToAdd: Cartable, quantityToAdd?: number): void;
-  // remove(itemIdToRemove: number, quantityToRemove?: number): void;
-  // getItem(id: number): CartedItem | undefined;
-  // getAmount(arg: CartedItem[]): number;
-  // getAmount(arg: CartedItem): number;
-  // getAmount(arg: number): number | undefined;
   list: T[];
   itemCount: number;
   add(itemToAdd: Cartable, quantityToAdd?: number): void;
