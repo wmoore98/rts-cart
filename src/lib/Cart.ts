@@ -16,6 +16,7 @@ export interface CartInterface<T extends CartedItem> {
   // getAmount(arg: CartedItem): number;
   // getAmount(arg: number): number | undefined;
   list: T[];
+  itemCount: number;
   add(itemToAdd: Cartable, quantityToAdd?: number): void;
   remove(itemIdToRemove: number, quantityToRemove?: number): void;
   getItem(id: number): T | undefined;
@@ -98,7 +99,7 @@ export class Cart<T extends CartedItem> implements CartInterface<T> {
     }
   }
 
-  get countItems() {
+  get itemCount() {
     return this._list.reduce((acc: number, item) => acc + item.quantity, 0);
   }
 

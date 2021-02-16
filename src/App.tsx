@@ -29,7 +29,7 @@ const getProducts = async (): Promise<CartItemType[]> =>
 
 const App = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [itemCount, setItemCount] = useState(0); // provide a mechanism for React to detect changes in cart
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     "products",
     getProducts
@@ -38,12 +38,12 @@ const App = () => {
 
   const handleAddToCart = (clickedItem: CartItemType) => {
     myCart.add(clickedItem);
-    setCartItems(myCart.list);
+    setItemCount(myCart.itemCount);
   };
 
   const handleRemoveFromCart = (id: number) => {
     myCart.remove(id);
-    setCartItems(myCart.list);
+    setItemCount(myCart.itemCount);
   };
 
   if (isLoading) {
@@ -63,13 +63,13 @@ const App = () => {
         onClose={() => setIsCartOpen(false)}
       >
         <Cart
-          cartItems={cartItems}
+          cartItems={myCart.list}
           addToCart={handleAddToCart}
           removeFromCart={handleRemoveFromCart}
         />
       </Drawer>
       <StyledButton onClick={() => setIsCartOpen(true)}>
-        <Badge badgeContent={myCart.countItems} color='error'>
+        <Badge badgeContent={itemCount} color='error'>
           <AddShoppingCartIcon />
         </Badge>
       </StyledButton>

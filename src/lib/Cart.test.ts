@@ -14,6 +14,8 @@ describe("Cart works as expected", () => {
     expect(cart).toHaveProperty("list");
     expect(cart.list).toBeInstanceOf(Array);
     expect(cart.list.length).toEqual(0);
+    expect(cart).toHaveProperty("itemCount");
+    expect(cart.itemCount).toEqual(0);
     expect(cart).toHaveProperty("add");
     expect(cart.add).toBeInstanceOf(Function);
     expect(cart).toHaveProperty("remove");
@@ -302,7 +304,7 @@ describe("Cart works as expected", () => {
     ];
     items.forEach((item, i) => cart.add(item, i + 1));
 
-    const count = cart.countItems;
+    const count = cart.itemCount;
 
     expect(count).toEqual(6);
   });
