@@ -10,6 +10,8 @@ import { StyledButton, Wrapper } from "./App.styles";
 import Item from "./Item/Item";
 import Cart from "./Cart/Cart";
 
+import { Cart as MyCart } from "./lib/Cart";
+
 export type CartItemType = {
   id: number;
   category: string;
@@ -19,6 +21,8 @@ export type CartItemType = {
   title: string;
   quantity: number;
 };
+
+const myCart = new MyCart<CartItemType>();
 
 const getProducts = async (): Promise<CartItemType[]> =>
   await (await fetch("https://fakestoreapi.com/products")).json();
@@ -32,38 +36,14 @@ const App = () => {
   );
   console.log(data);
 
-  const getTotalItems = (items: CartItemType[]) =>
-    items.reduce((acc: number, item) => acc + item.quantity, 0);
-
   const handleAddToCart = (clickedItem: CartItemType) => {
-    setCartItems((prev) => {
-      if (prev.find((item) => item.id === clickedItem.id)) {
-        return prev.map((item) =>
-          item.id === clickedItem.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prev, { ...clickedItem, quantity: 1 }];
-      }
-    });
+    myCart.add(clickedItem);
+    setCartItems(myCart.list);
   };
 
   const handleRemoveFromCart = (id: number) => {
-    setCartItems((prev) =>
-      prev.reduce((acc, item) => {
-        if (item.id === id) {
-          const updatedItem = { ...item, quantity: item.quantity - 1 };
-          if (updatedItem.quantity > 0) {
-            return [...acc, updatedItem];
-          } else {
-            return acc;
-          }
-        } else {
-          return [...acc, item];
-        }
-      }, [] as CartItemType[])
-    );
+    myCart.remove(id);
+    setCartItems(myCart.list);
   };
 
   if (isLoading) {
@@ -89,7 +69,7 @@ const App = () => {
         />
       </Drawer>
       <StyledButton onClick={() => setIsCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color='error'>
+        <Badge badgeContent={myCart.countItems} color='error'>
           <AddShoppingCartIcon />
         </Badge>
       </StyledButton>
